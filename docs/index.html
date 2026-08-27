@@ -447,7 +447,7 @@
                     <div class="cm-legend" id="cmLegend"></div>
                 </div>
                 <div class="classmates-map-right">
-                    <div class="cm-list-note">名字顺序不分先后，仅按姓氏首字母排序</div>
+                    <div class="cm-list-note">名字顺序不分先后，仅按姓氏笔画排序</div>
                     <div class="cm-rank-list" id="cmRankList"></div>
                 </div>
             </div>
@@ -513,6 +513,27 @@
             "浙江": {count:2, names:["叶铭磊","张起睿"]},
             "贵州": {count:2, names:["张念","杨梦瑶"]}
         };
+
+        // 姓氏笔画数映射表
+        var strokeCountMap = {
+            '陈':7,'林':8,'王':4,'杨':7,'符':11,'梁':11,'易':8,'朱':6,
+            '黄':11,'贾':10,'张':7,'李':7,'尤':4,'马':3,'吴':7,'华':6,
+            '刘':6,'徐':10,'牛':4,'何':7,'田':5,'郝':9,'胡':9,'姜':9,
+            '彭':12,'史':5,'叶':5,'蒙':13
+        };
+        function getStrokeCount(name) {
+            var firstChar = name.charAt(0);
+            return strokeCountMap[firstChar] || 99; // 未知姓氏排最后
+        }
+
+        // 对每个省份内的姓名按姓氏笔画排序
+        for (var province in CLASSMATES) {
+            if (CLASSMATES.hasOwnProperty(province)) {
+                CLASSMATES[province].names.sort(function(a, b) {
+                    return getStrokeCount(a) - getStrokeCount(b);
+                });
+            }
+        }
 
         function animateCounter(el) {
             var target = parseFloat(el.getAttribute('data-target'));

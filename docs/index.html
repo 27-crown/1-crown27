@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="renderer" content="webkit">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>2026级医学信息工程本 · 同学分布</title>
+<title>2026级医学信息工程</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -184,7 +184,7 @@
 
     <section id="classmates">
         <div class="container">
-            <h2 class="section-title">2026级医学信息工程本同学分布</h2>
+            <h2 class="section-title">2026级医学信息工程</h2>
             <p class="section-subtitle">六十一位同窗，自十八省奔赴而来，齐聚海南医科大学</p>
             <div class="cm-stats">
                 <div class="map-stat"><div class="num counter-num" data-target="61">0</div><div class="label">同学总数</div></div>
@@ -196,7 +196,7 @@
                     <div class="cm-legend" id="cmLegend"></div>
                 </div>
                 <div class="classmates-map-right">
-                    <div class="cm-list-note">名字顺序不分先后，仅按姓氏笔画排序</div>
+                    <div class="cm-list-note">名单按姓氏笔画排序，同姓按拼音排序</div>
                     <div class="cm-rank-list" id="cmRankList"></div>
                 </div>
             </div>
@@ -265,6 +265,28 @@
             "贵州": {count:2, names:["张念","杨梦瑶"]}
         };
 
+        // 姓氏笔画数（简体常用姓氏）
+        var STROKE = {
+            "马": 3, "王": 4, "尤": 4, "牛": 4, "田": 5, "史": 5, "叶": 5,
+            "华": 6, "刘": 6, "朱": 6,
+            "李": 7, "吴": 7, "陈": 7, "杨": 7, "张": 7, "何": 7,
+            "林": 8, "易": 8,
+            "郝": 9, "姜": 9, "胡": 9,
+            "贾": 10, "徐": 10, "凌": 10,
+            "黄": 11, "符": 11, "梁": 11,
+            "彭": 12, "蒙": 13
+        };
+        function sortNamesByStroke(names) {
+            var arr = names.slice();
+            arr.sort(function(a, b) {
+                var sa = STROKE[a.charAt(0)] || 99;
+                var sb = STROKE[b.charAt(0)] || 99;
+                if (sa !== sb) return sa - sb;
+                return a.localeCompare(b, 'zh');
+            });
+            return arr;
+        }
+
         function animateCounter(el) {
             var target = parseFloat(el.getAttribute('data-target'));
             var duration = 1500;
@@ -317,7 +339,7 @@
                         var html = '<div class="cm-tt-name">' + provData.name + '</div>';
                         if (cm) {
                             html += '<div class="cm-tt-count">' + cm.count + '位同学</div>';
-                            html += '<div class="cm-tt-names">' + cm.names.join('、') + '</div>';
+                    html += '<div class="cm-tt-names">' + sortNamesByStroke(cm.names).join('、') + '</div>';
                         } else {
                             html += '<div class="cm-tt-count" style="color:var(--text-3)">暂无同学</div>';
                         }
@@ -443,7 +465,7 @@
                 html += '<div class="cm-rank-row" data-province="' + key + '">' +
                     '<span class="cm-rank-num">' + (i + 1) + '</span>' +
                     '<div style="flex:1"><div class="cm-rank-name">' + key + '</div>' +
-                    '<div class="cm-rank-names">' + data.names.join('、') + '</div></div>' +
+                    '<div class="cm-rank-names">' + sortNamesByStroke(data.names).join('、') + '</div></div>' +
                     '<span class="cm-rank-count">' + data.count + '人</span></div>';
             }
             rankEl.innerHTML = html;
